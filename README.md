@@ -51,11 +51,17 @@ HOW TO IMPLEMENT:
 This program is in ways a class so it can be added to your program by adding the following code to your program:
 
 import urllib2, json, csv
+
 class GOFind():
+
 arrayMainDictGoCat = []
+
 listGOid = []
+
 listName = []
+
 listScore = []
+
 [copy paste of all the definitions]
 
 
