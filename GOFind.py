@@ -12,7 +12,7 @@
 # urllib2 needed to read urls and retrieve data from them
 # json needed to read json files
 # csv needed to read the data from Uniprot 
-import urllib2, json, csv
+import urllib2, json, csv, re
 
 #Constants:
 #Array that contains all the Terms from GoCat. Items can be added and removed from it.
@@ -275,16 +275,22 @@ def submitAllBySpecies(species):
         urlUniprot_part1 = "http://www.uniprot.org/uniprot/?query=GO:"
         urlUniprot_part3 = "&&columns=genes,organism&format=tab"
         #Sets the string input from goid
-        urlUniprot_part2 = arrayMainDictGoCat[counter]["GOid"]
+        urlUniprot_GO = arrayMainDictGoCat[counter]["GOid"]
+        if ( re.search('^GO\:',urlUniprot_GO) != None ): 
+			urlUniprot_GO = urlUniprot_GO.lstrip('GO:')
+        urlUniprot_part2 = "%s+AND+species:%s" %(urlUniprot_GO,urllib2.quote(species)) 
+        print urlUniprot_part2
         #Combines all Uniprot url strings to make a single url, including the goid input
         urlUniprotFULL = urlUniprot_part1 + urlUniprot_part2 + urlUniprot_part3
         #Opens and reads the url data via csv
+        print urlUniprotFULL
         responce = urllib2.urlopen(urlUniprotFULL)
         csvReader = csv.reader(responce)
         #For loop to read through each line of the data
         for row in csvReader:
             #Converts the current line into a string
             rowString = str(row)
+            print rowString
             #Reformatting string to be easily readable
             rowString1 = rowString.replace("['", "")
             rowString2 = rowString1.replace("']", "")
@@ -299,6 +305,7 @@ def submitAllBySpecies(species):
             if species in dictGeneSpecies["Species"]:
                 #Add that dict to the list
                 arrayGeneFilteredFromSpecies.append(dictGeneSpecies["Gene"])
+                print dictGeneSpecies["Gene"]
         #Increment counter       
         counter = counter + 1
     #Return the list
@@ -309,7 +316,8 @@ def submitAllBySpecies(species):
 
 def main():
     
-    print setSearchTerm("p54")
+    setSearchTerm("ethylene root")
+    print submitAllBySpecies("Arabidopsis thaliana")
     
 if __name__ == "__main__":
     main()
