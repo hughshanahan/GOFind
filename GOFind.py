@@ -290,7 +290,6 @@ def submitAllBySpecies(species):
         for row in csvReader:
             #Converts the current line into a string
             rowString = str(row)
-            print rowString
             #Reformatting string to be easily readable
             rowString1 = rowString.replace("['", "")
             rowString2 = rowString1.replace("']", "")
@@ -305,7 +304,6 @@ def submitAllBySpecies(species):
             if species in dictGeneSpecies["Species"]:
                 #Add that dict to the list
                 arrayGeneFilteredFromSpecies.append(dictGeneSpecies["Gene"])
-                print dictGeneSpecies["Gene"]
         #Increment counter       
         counter = counter + 1
     #Return the list
