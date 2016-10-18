@@ -1,0 +1,255 @@
+<entry dataset="TrEMBL" created="2011-06-28" modified="2016-10-05" version="43">
+<accession>F4JIK9</accession>
+<name>F4JIK9_ARATH</name>
+<protein>
+<submittedName>
+<fullName evidence="6">Galactosyltransferase family protein</fullName>
+</submittedName>
+</protein>
+<gene>
+<name type="ordered locus" evidence="6 8">At4g21060</name>
+</gene>
+<organism evidence="6 7">
+<name type="scientific">Arabidopsis thaliana</name>
+<name type="common">Mouse-ear cress</name>
+<dbReference type="NCBI Taxonomy" id="3702"/>
+<lineage>
+<taxon>Eukaryota</taxon>
+<taxon>Viridiplantae</taxon>
+<taxon>Streptophyta</taxon>
+<taxon>Embryophyta</taxon>
+<taxon>Tracheophyta</taxon>
+<taxon>Spermatophyta</taxon>
+<taxon>Magnoliophyta</taxon>
+<taxon>eudicotyledons</taxon>
+<taxon>Gunneridae</taxon>
+<taxon>Pentapetalae</taxon>
+<taxon>rosids</taxon>
+<taxon>malvids</taxon>
+<taxon>Brassicales</taxon>
+<taxon>Brassicaceae</taxon>
+<taxon>Camelineae</taxon>
+<taxon>Arabidopsis</taxon>
+</lineage>
+</organism>
+<reference key="1" evidence="6 7">
+<citation type="journal article" date="1999" name="Nature" volume="402" first="769" last="777">
+<title>Sequence and analysis of chromosome 4 of the plant Arabidopsis thaliana.</title>
+<authorList>
+<consortium name="EU"/>
+<consortium name="CSHL and WU Arabidopsis Sequencing Project"/>
+<person name="Mayer K.F.X."/>
+</authorList>
+<dbReference type="PubMed" id="10617198"/>
+<dbReference type="DOI" id="10.1038/47134"/>
+</citation>
+<scope>NUCLEOTIDE SEQUENCE [LARGE SCALE GENOMIC DNA]</scope>
+<source>
+<strain evidence="7">cv. Columbia</strain>
+</source>
+</reference>
+<reference key="2" evidence="7">
+<citation type="submission" date="2011-04" db="EMBL/GenBank/DDBJ databases">
+<authorList>
+<consortium name="The Arabidopsis Information Resource (TAIR)"/>
+</authorList>
+</citation>
+<scope>GENOME REANNOTATION</scope>
+<source>
+<strain evidence="7">cv. Columbia</strain>
+</source>
+</reference>
+<dbReference type="EMBL" id="CP002687">
+<property type="protein sequence ID" value="AEE84392.1"/>
+<property type="molecule type" value="Genomic_DNA"/>
+</dbReference>
+<dbReference type="RefSeq" id="NP_193838.2">
+<property type="nucleotide sequence ID" value="NM_118224.2"/>
+</dbReference>
+<dbReference type="UniGene" id="At.32667"/>
+<dbReference type="ProteinModelPortal" id="F4JIK9"/>
+<dbReference type="STRING" id="3702.AT4G21060.1"/>
+<dbReference type="PaxDb" id="F4JIK9"/>
+<dbReference type="EnsemblPlants" id="AT4G21060.1">
+<property type="protein sequence ID" value="AT4G21060.1"/>
+<property type="gene ID" value="AT4G21060"/>
+</dbReference>
+<dbReference type="GeneID" id="827853"/>
+<dbReference type="Gramene" id="AT4G21060.1">
+<property type="protein sequence ID" value="AT4G21060.1"/>
+<property type="gene ID" value="AT4G21060"/>
+</dbReference>
+<dbReference type="TAIR" id="AT4G21060"/>
+<dbReference type="eggNOG" id="KOG2287">
+<property type="taxonomic scope" value="Eukaryota"/>
+</dbReference>
+<dbReference type="eggNOG" id="ENOG410ZZ1B">
+<property type="taxonomic scope" value="LUCA"/>
+</dbReference>
+<dbReference type="OMA" id="HRPVIEH"/>
+<dbReference type="OrthoDB" id="EOG093604RT"/>
+<dbReference type="Proteomes" id="UP000006548">
+<property type="component" value="Chromosome 4"/>
+</dbReference>
+<dbReference type="ExpressionAtlas" id="F4JIK9">
+<property type="expression patterns" value="baseline and differential"/>
+</dbReference>
+<dbReference type="GO" id="GO:0012505">
+<property type="term" value="C:endomembrane system"/>
+<property type="evidence" value="ECO:0000314"/>
+<property type="project" value="TAIR"/>
+</dbReference>
+<dbReference type="GO" id="GO:0005794">
+<property type="term" value="C:Golgi apparatus"/>
+<property type="evidence" value="ECO:0000501"/>
+<property type="project" value="UniProtKB-KW"/>
+</dbReference>
+<dbReference type="GO" id="GO:0016021">
+<property type="term" value="C:integral component of membrane"/>
+<property type="evidence" value="ECO:0000501"/>
+<property type="project" value="UniProtKB-KW"/>
+</dbReference>
+<dbReference type="GO" id="GO:0030246">
+<property type="term" value="F:carbohydrate binding"/>
+<property type="evidence" value="ECO:0000501"/>
+<property type="project" value="InterPro"/>
+</dbReference>
+<dbReference type="GO" id="GO:1990714">
+<property type="term" value="F:hydroxyproline O-galactosyltransferase activity"/>
+<property type="evidence" value="ECO:0000314"/>
+<property type="project" value="TAIR"/>
+</dbReference>
+<dbReference type="GO" id="GO:0035250">
+<property type="term" value="F:UDP-galactosyltransferase activity"/>
+<property type="evidence" value="ECO:0000314"/>
+<property type="project" value="TAIR"/>
+</dbReference>
+<dbReference type="GO" id="GO:0010405">
+<property type="term" value="P:arabinogalactan protein metabolic process"/>
+<property type="evidence" value="ECO:0000314"/>
+<property type="project" value="TAIR"/>
+</dbReference>
+<dbReference type="GO" id="GO:0018258">
+<property type="term" value="P:protein O-linked glycosylation via hydroxyproline"/>
+<property type="evidence" value="ECO:0000314"/>
+<property type="project" value="TAIR"/>
+</dbReference>
+<dbReference type="GO" id="GO:0080147">
+<property type="term" value="P:root hair cell development"/>
+<property type="evidence" value="ECO:0000315"/>
+<property type="project" value="TAIR"/>
+</dbReference>
+<dbReference type="Gene3D" id="2.60.120.200">
+<property type="match status" value="2"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR013320">
+<property type="entry name" value="ConA-like_dom"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR001079">
+<property type="entry name" value="Galectin_CRD"/>
+</dbReference>
+<dbReference type="InterPro" id="IPR002659">
+<property type="entry name" value="Glyco_trans_31"/>
+</dbReference>
+<dbReference type="PANTHER" id="PTHR11214">
+<property type="entry name" value="PTHR11214"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="Pfam" id="PF00337">
+<property type="entry name" value="Gal-bind_lectin"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="Pfam" id="PF01762">
+<property type="entry name" value="Galactosyl_T"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="SMART" id="SM00908">
+<property type="entry name" value="Gal-bind_lectin"/>
+<property type="match status" value="1"/>
+</dbReference>
+<dbReference type="SUPFAM" id="SSF49899">
+<property type="entry name" value="SSF49899"/>
+<property type="match status" value="2"/>
+</dbReference>
+<dbReference type="PROSITE" id="PS51304">
+<property type="entry name" value="GALECTIN"/>
+<property type="match status" value="1"/>
+</dbReference>
+<proteinExistence type="predicted"/>
+<keyword id="KW-0181" evidence="7">Complete proteome</keyword>
+<keyword id="KW-0328" evidence="2 6">Glycosyltransferase</keyword>
+<keyword id="KW-0333" evidence="1">Golgi apparatus</keyword>
+<keyword id="KW-0472" evidence="3 4">Membrane</keyword>
+<keyword id="KW-1185" evidence="7">Reference proteome</keyword>
+<keyword id="KW-0808" evidence="2 6">Transferase</keyword>
+<keyword id="KW-0812" evidence="3 4">Transmembrane</keyword>
+<keyword id="KW-1133" evidence="3 4">Transmembrane helix</keyword>
+<feature type="transmembrane region" description="Helical" evidence="4">
+<location>
+<begin position="70"/>
+<end position="94"/>
+</location>
+</feature>
+<feature type="domain" description="Galectin" evidence="5">
+<location>
+<begin position="248"/>
+<end position="462"/>
+</location>
+</feature>
+<evidence key="1" type="ECO:0000256">
+<source>
+<dbReference type="SAAS" id="SAAS00468302"/>
+</source>
+</evidence>
+<evidence key="2" type="ECO:0000256">
+<source>
+<dbReference type="SAAS" id="SAAS00468304"/>
+</source>
+</evidence>
+<evidence key="3" type="ECO:0000256">
+<source>
+<dbReference type="SAAS" id="SAAS00468316"/>
+</source>
+</evidence>
+<evidence key="4" type="ECO:0000256">
+<source>
+<dbReference type="SAM" id="Phobius"/>
+</source>
+</evidence>
+<evidence key="5" type="ECO:0000259">
+<source>
+<dbReference type="PROSITE" id="PS51304"/>
+</source>
+</evidence>
+<evidence key="6" type="ECO:0000313">
+<source>
+<dbReference type="EMBL" id="AEE84392.1"/>
+</source>
+</evidence>
+<evidence key="7" type="ECO:0000313">
+<source>
+<dbReference type="Proteomes" id="UP000006548"/>
+</source>
+</evidence>
+<evidence key="8" type="ECO:0000313">
+<source>
+<dbReference type="TAIR" id="AT4G21060"/>
+</source>
+</evidence>
+<sequence length="741" mass="84298" checksum="E6272C7A0A2E3220" modified="2011-06-28" version="1">
+MATSRLARFVSEVAPPQFVTVMRRHRAAKQKLDTIKEEENKEDSFNGGMVVMMKTSHQHT
+LLIFRSCRDLAAIVGFRILLFTGFSGFYLVFLAFKFPHFIEMVAMLSGDTGLDGALSDTS
+LDVSLSGSLRNDMLNRKLEDEDHQSGPSTTQKVSPEEKINGSKQIQPLLFRYGRISGEVM
+RRRNRTIHMSPFERMADEAWILGSKAWEDVDKFEVDKINESASIFEGKVESCPSQISMNG
+DDLNKANRIMLLPCGLAAGSSITILGTPQYAHKESVPQRSRLTRSYGMVLVSQFMVELQG
+LKTGDGEYPPKILHLNPRIKGDWNHRPVIEHNTCYRMQWGVAQRCDGTPSKKDADVLVDG
+FRRCEKWTQNDIIDMVDSKESKTTSWFKRFIGREQKPEVTWSFPFAEGKVFVLTLRAGID
+GFHINVGGRHVSSFPYRPGFTIEDATGLAVTGDVDIHSIHATSLSTSHPSFSPQKAIEFS
+SEWKAPPLPGTPFRLFMGVLSATNHFSERMAVRKTWMQHPSIKSSDVVARFFVALNPRKE
+VNAMLKKEAEYFGDIVILPFMDRYELVVLKTIAICEFGVQNVTAPYIMKCDDDTFIRVES
+ILKQIDGVSPEKSLYMGNLNLRHRPLRTGKWTVTWEEWPEAVYPPYANGPGYIISSNIAK
+YIVSQNSRHKLRLFKMEDVSMGLWVEQFNASMQPVEYSHSWKFCQYGCTLNYYTAHYQSP
+SQMMCLWDNLLKGRPQCCNFR
+</sequence>
+</entry>
+
