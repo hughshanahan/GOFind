@@ -7,12 +7,13 @@
 # Data can then be submitted to Uniprot to return all relevant gene-names and organism species associated to the GO term's GOid
 #
 # @author William Steve Herbosch
+# @author Hugh Shanahan
 
 #Imports:
 # urllib2 needed to read urls and retrieve data from them
 # json needed to read json files
 # csv needed to read the data from Uniprot 
-import urllib2, json, csv, re
+import urllib2, json, csv, re, sys, xmltodict
 
 #Constants:
 #Array that contains all the Terms from GoCat. Items can be added and removed from it.
@@ -273,42 +274,68 @@ def submitAllBySpecies(species):
     while (counter < len(arrayMainDictGoCat)):
         #Sets Uniprot urls as strings
         urlUniprot_part1 = "http://www.uniprot.org/uniprot/?query=GO:"
-        urlUniprot_part3 = "&&columns=genes,organism&format=tab"
+        urlUniprot_part3 = "&format=xml"
         #Sets the string input from goid
         urlUniprot_GO = arrayMainDictGoCat[counter]["GOid"]
         if ( re.search('^GO\:',urlUniprot_GO) != None ): 
 			urlUniprot_GO = urlUniprot_GO.lstrip('GO:')
         urlUniprot_part2 = "%s+AND+species:%s" %(urlUniprot_GO,urllib2.quote(species)) 
         print urlUniprot_part2
-        #Combines all Uniprot url strings to make a single url, including the goid input
+        #Combines all Uniprot url strings to make a single url for xml, including the goid/species input
         urlUniprotFULL = urlUniprot_part1 + urlUniprot_part2 + urlUniprot_part3
-        #Opens and reads the url data via csv
+        #Opens and reads the xml data 
         print urlUniprotFULL
         responce = urllib2.urlopen(urlUniprotFULL)
-        csvReader = csv.reader(responce)
-        #For loop to read through each line of the data
-        for row in csvReader:
-            #Converts the current line into a string
-            rowString = str(row)
-            #Reformatting string to be easily readable
-            rowString1 = rowString.replace("['", "")
-            rowString2 = rowString1.replace("']", "")
-            rowString3 = rowString2.replace('["', '')
-            rowString4 = rowString3.replace('"]', '')
-            #Separates Genes and Species and assigns them values
-            thisIsAGene = rowString4.split("\\t")[0]
-            thisIsASpecies = rowString4.split("\\t")[1]
-            #Creates a dictionary containing said two values
-            dictGeneSpecies = {"Gene": thisIsAGene, "Species": thisIsASpecies}
-            #If the Species value in that row contains the string of the species input
-            if species in dictGeneSpecies["Species"]:
-                #Add that dict to the list
-                arrayGeneFilteredFromSpecies.append(dictGeneSpecies["Gene"])
+        uniprotData = responce.read()
+        responce.close()
+        doc = xmltodict.parse(uniprotData)
+        
+        #Now gather all the genes, remove all spurious species that slip through
+        entries = doc[u'uniprot'][u'entry']
+        for entry in entries:
+			entrySpecies = searchEntry(entry,u'organism',u'scientific')
+			locus = searchEntry(entry,u'gene',u'ordered locus')
+			if entrySpecies == species:
+  #Creates a dictionary containing said two values				
+				dictGeneSpecies = {"Gene": locus, "Species": species}
+  #If the Species value in that row contains the string of the species input				
+				if species in dictGeneSpecies["Species"]:
+  #Add that dict to the list 					
+					arrayGeneFilteredFromSpecies.append(dictGeneSpecies["Gene"])                 
         #Increment counter       
         counter = counter + 1
     #Return the list
     return arrayGeneFilteredFromSpecies
 
+
+def searchEntry(entry,rootKey,key):
+	found = False
+	i = 0
+	value = ''
+	if rootKey in entry: 
+		entryData = entry[rootKey]
+		while (not found):
+		    if type(entryData[u'name']) is list:
+			    eD = entryData[u'name'][i]
+		    else:
+			    eD = entryData[u'name']
+		    
+		    try: 
+			    if (eD[u'@type'] == key):
+				    value = eD['#text']
+				    found = True
+				    break
+		    except KeyError:
+			    print eD
+			
+		    i += 1
+		    if ( i >= len(entryData[u'name']) ):
+			    found = True
+					 
+	return value	 
+	
+	
+	
 ###############################################################################################################
 # USED FOR TESTING METHODS. REMOVE IN FINAL VERSION!!!
 
