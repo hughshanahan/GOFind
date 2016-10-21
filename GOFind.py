@@ -13,7 +13,8 @@
 # urllib2 needed to read urls and retrieve data from them
 # json needed to read json files
 # csv needed to read the data from Uniprot 
-import urllib2, json, csv, re, sys, xmltodict
+import urllib2, json, csv, re, sys, xmltodict, tempfile, os
+from subprocess import call
 
 #Constants:
 #Array that contains all the Terms from GoCat. Items can be added and removed from it.
@@ -273,7 +274,7 @@ def submitAllBySpecies(species):
     #While loop to go through the list
     while (counter < len(arrayMainDictGoCat)):
         #Sets Uniprot urls as strings
-        urlUniprot_part1 = "http://www.uniprot.org/uniprot/?query=GO:"
+        urlUniprot_part1 = "http://www.uniprot.org/uniprot/?query=go-id:"
         urlUniprot_part3 = "&format=xml"
         #Sets the string input from goid
         urlUniprot_GO = arrayMainDictGoCat[counter]["GOid"]
@@ -285,13 +286,24 @@ def submitAllBySpecies(species):
         urlUniprotFULL = urlUniprot_part1 + urlUniprot_part2 + urlUniprot_part3
         #Opens and reads the xml data 
         print urlUniprotFULL
-        responce = urllib2.urlopen(urlUniprotFULL)
-        uniprotData = responce.read()
-        responce.close()
-        doc = xmltodict.parse(uniprotData)
+        #responce = urllib2.urlopen(urlUniprotFULL)
+        #uniprotData = responce.read()
+        #responce.close()
+        #doc = xmltodict.parse(uniprotData)
+        temp_name = "/Users/upac004/Downloads/"+next(tempfile._get_candidate_names())
+        print temp_name
+        curlCommand = "curl -L -o "+temp_name+" \""+urlUniprotFULL+"\" "
+        print curlCommand
+        os.system(curlCommand)
+        #call(["curl", "-L", "-o",temp_name,urlUniprotFULL])
+        print counter
+        with open(temp_name) as fd:
+            doc = xmltodict.parse(fd.read())
+
         
         #Now gather all the genes, remove all spurious species that slip through
         entries = doc[u'uniprot'][u'entry']
+        print 'Starting query'
         for entry in entries:
 			entrySpecies = searchEntry(entry,u'organism',u'scientific')
 			locus = searchEntry(entry,u'gene',u'ordered locus')
@@ -342,7 +354,8 @@ def searchEntry(entry,rootKey,key):
 def main():
     
     setSearchTerm("ethylene root")
-    print submitAllBySpecies("Arabidopsis thaliana")
+    print "Hello"
+    submitAllBySpecies("Arabidopsis thaliana")
     
 if __name__ == "__main__":
     main()
