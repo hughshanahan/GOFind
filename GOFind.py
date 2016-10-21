@@ -290,32 +290,34 @@ def submitAllBySpecies(species):
         #uniprotData = responce.read()
         #responce.close()
         #doc = xmltodict.parse(uniprotData)
-        temp_name = "/Users/upac004/Downloads/"+next(tempfile._get_candidate_names())
+        temp_name = "./"+next(tempfile._get_candidate_names())
         print temp_name
         curlCommand = "curl -L -o "+temp_name+" \""+urlUniprotFULL+"\" "
         print curlCommand
         os.system(curlCommand)
         #call(["curl", "-L", "-o",temp_name,urlUniprotFULL])
-        print counter
-        with open(temp_name) as fd:
-            doc = xmltodict.parse(fd.read())
-
+        if os.stat(temp_name).st_size > 0:
+			with open(temp_name) as fd:
+				doc = xmltodict.parse(fd.read())
+			
         
         #Now gather all the genes, remove all spurious species that slip through
-        entries = doc[u'uniprot'][u'entry']
-        print 'Starting query'
-        for entry in entries:
-			entrySpecies = searchEntry(entry,u'organism',u'scientific')
-			locus = searchEntry(entry,u'gene',u'ordered locus')
-			if entrySpecies == species:
+			entries = doc[u'uniprot'][u'entry']
+			print 'Starting query'
+			for entry in entries:
+				entrySpecies = searchEntry(entry,u'organism',u'scientific')
+				locus = searchEntry(entry,u'gene',u'ordered locus')
+				if entrySpecies == species:
   #Creates a dictionary containing said two values				
-				dictGeneSpecies = {"Gene": locus, "Species": species}
+					dictGeneSpecies = {"Gene": locus, "Species": species}
   #If the Species value in that row contains the string of the species input				
-				if species in dictGeneSpecies["Species"]:
+					if species in dictGeneSpecies["Species"]:
   #Add that dict to the list 					
-					arrayGeneFilteredFromSpecies.append(dictGeneSpecies["Gene"])                 
+						arrayGeneFilteredFromSpecies.append(dictGeneSpecies["Gene"]) 
+						                
         #Increment counter       
-        counter = counter + 1
+        counter += 1
+        os.remove(temp_name)
     #Return the list
     return arrayGeneFilteredFromSpecies
 
@@ -326,23 +328,28 @@ def searchEntry(entry,rootKey,key):
 	value = ''
 	if rootKey in entry: 
 		entryData = entry[rootKey]
-		while (not found):
-		    if type(entryData[u'name']) is list:
-			    eD = entryData[u'name'][i]
-		    else:
-			    eD = entryData[u'name']
-		    
-		    try: 
-			    if (eD[u'@type'] == key):
-				    value = eD['#text']
-				    found = True
-				    break
-		    except KeyError:
-			    print eD
+		if type(entryData) is dict:
+			while (not found):
 			
-		    i += 1
-		    if ( i >= len(entryData[u'name']) ):
-			    found = True
+				if type(entryData[u'name']) is list:
+					eD = entryData[u'name'][i]
+				else:
+					eD = entryData[u'name']
+		    
+				try: 
+					if (eD[u'@type'] == key):
+						value = eD['#text']
+						print value
+						found = True
+						break
+				except KeyError:
+					print eD
+
+				if ( i >= len(entryData[u'name']) ):
+					found = True
+			
+				i += 1
+		   
 					 
 	return value	 
 	
