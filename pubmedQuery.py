@@ -22,40 +22,46 @@
 #  
 #  
 
-# Note - we are using the NCBI entrez direct command line scripts esearch and efetch
+# Note - we are using the NCBI entrez direct command line scripts esearch, efetch and xtract
 # these can be downloaded from ftp://ftp.ncbi.nlm.nih.gov/entrez/entrezdirect/
-import os, tempfile, xmltodict
+import os, tempfile
 
 def abstracts(queryString):
-	temp_name = "./"+next(tempfile._get_candidate_names())
-	efetchCommand = "esearch -db pubmed -query \""+queryString+"\" | efetch -mode xml -format abstract >"+temp_name
-	print efetchCommand
-	os.system(efetchCommand) 
-	with open(temp_name) as fd:
-		doc = xmltodict.parse(fd.read())		
-	fd.close()	
-		
-	articles = doc[u'PubmedArticleSet'][u'PubmedArticle']	
 	
-	theAbstracts = []
+# First call pubmed to pull out abstracts - one line per abstract	
+    temp_name = "./"+next(tempfile._get_candidate_names())
+    efetchCommand = "esearch -db pubmed -query \""+queryString+"\" | efetch -mode xml -format abstract | xtract -pattern PubmedArticle -block Abstract -element AbstractText>"+temp_name
+    os.system(efetchCommand) 
 	
-	for article in articles:
-		theAbstracts.append(article[u'MedlineCitation'][u'Article'][u'Abstract'][u'AbstractText']
-)
+# Now call Normalizr (Python 3 - oi vey) to normalise text. 
+# Normalised text will overwrite original text.
 
-	return theAbstracts
-	
-	
+    normalizeCommand = "/Users/upac004/Python/GOFind-master/normText.py "+ temp_name
+    os.system(normalizeCommand)
+    
+# Now read in file to get each abstract and return a list    	
+    theAbstracts = []
+    fd = open(temp_name)
+    for line in fd:
+
+        
+# Remove any special non-ASCII characters
+        line = ''.join([i if ord(i) < 128 else '' for i in line]) 
+        theAbstracts.append(line)
+        
 		
+    fd.close()	
+    os.remove(temp_name)
+
+    return theAbstracts
 	
-	
-	
+
 
 
 def main(args):
-    myAbstracts = abstracts("SATB gene function")
-    for abstract in myAbstracts :
-		print abstract
+    myAbstracts = abstracts("SATB2 gene function")
+#    for abstract in myAbstracts :
+#		print abstract
 
 if __name__ == '__main__':
     import sys
