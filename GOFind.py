@@ -28,16 +28,23 @@ listScore = []
 
 #Method 1: setSearchTerm(goTerm) 
 # Takes a search term as input and returns a list of dictionaries containing information about related GO terms
-def setSearchTerm(goTerm):
-    #Creates strings of the GoCat url
+def setSearchTerm(goTerm,searchType='ml'):
+    searchTypes = ['db','ml','mx']
+    if searchType not in searchTypes:
+       sys.exit("setSearchTerm:- searchTypes must be db, ml or mx")
+	#Create strings
     urlGoCat_part1 = "http://eagl.unige.ch/GOCat/result.jsp?queryTXT="
-    urlGoCat_part3 = "%20function&cat=ml&json"    
+    urlGoCat_part3 = "%20function&cat="+searchType+"&json"
     #Sets the input value as a string and fixed all " " for "%20", as they usually do in urls
     urlGoCat_part2Temp = str(goTerm)
     urlGoCat_part2 = urlGoCat_part2Temp.replace(' ', '%20')
+    urlGoCat_part2 = urlGoCat_part2.replace('/','')
+    urlGoCat_part2 = urlGoCat_part2.replace('\t','')
     #Combines all parts of the GoCat url
     urlGoCatFULL = urlGoCat_part1 + urlGoCat_part2 + urlGoCat_part3
+    urlGoCatFULL = urlGoCatFULL.replace('\n','')
     #Open the GoCat url
+#    print urlGoCatFULL
     webUrlGoCat = urllib2.urlopen(urlGoCatFULL)
     #Standard url code 200 check
     if (webUrlGoCat.getcode() == 200):
@@ -268,39 +275,32 @@ def size():
 # Same as submitOneBySpecies, but does not ask for a goid as input because it submits all items in the current version of the list
 def submitAllBySpecies(species):
     #Creates an array to store the genes
-    arrayGeneFilteredFromSpecies = []
-    #Counter
-    counter = 0
-    #While loop to go through the list
-    while (counter < len(arrayMainDictGoCat)):
+    dictGeneFilteredFromSpecies = {}
+    
+    #Iterator to go through dict
+    for thisGOCat in iter(arrayMainDictGoCat):
         #Sets Uniprot urls as strings
         urlUniprot_part1 = "http://www.uniprot.org/uniprot/?query=go-id:"
         urlUniprot_part3 = "&format=xml"
         #Sets the string input from goid
-        urlUniprot_GO = arrayMainDictGoCat[counter]["GOid"]
+        urlUniprot_GO = thisGOCat["GOid"]
+        scote = thisGOCat["ExtraInfo"]["Score"]
         if ( re.search('^GO\:',urlUniprot_GO) != None ): 
 			urlUniprot_GO = urlUniprot_GO.lstrip('GO:')
         urlUniprot_part2 = "%s+AND+species:%s" %(urlUniprot_GO,urllib2.quote(species)) 
-        print urlUniprot_part2
+        
         #Combines all Uniprot url strings to make a single url for xml, including the goid/species input
         urlUniprotFULL = urlUniprot_part1 + urlUniprot_part2 + urlUniprot_part3
         #Opens and reads the xml data 
-        print urlUniprotFULL
-        #responce = urllib2.urlopen(urlUniprotFULL)
-        #uniprotData = responce.read()
-        #responce.close()
-        #doc = xmltodict.parse(uniprotData)
+        
         temp_name = "./"+next(tempfile._get_candidate_names())
-        print temp_name
-        curlCommand = "curl -L -o "+temp_name+" \""+urlUniprotFULL+"\" "
-        print curlCommand
+        curlCommand = "curl -L -o "+temp_name+" \""+urlUniprotFULL+"\" >& /dev/null"
         os.system(curlCommand)
-        #call(["curl", "-L", "-o",temp_name,urlUniprotFULL])
+        
         if os.stat(temp_name).st_size > 0:
 			with open(temp_name) as fd:
 				doc = xmltodict.parse(fd.read())
-			
-        
+			    
         #Now gather all the genes, remove all spurious species that slip through
 			entries = doc[u'uniprot'][u'entry']
 			print 'Starting query'
@@ -315,12 +315,9 @@ def submitAllBySpecies(species):
   #Add that dict to the list 					
 						arrayGeneFilteredFromSpecies.append(dictGeneSpecies["Gene"]) 
 						                
-        #Increment counter       
-        counter += 1
         os.remove(temp_name)
     #Return the list
     return arrayGeneFilteredFromSpecies
-
 
 def searchEntry(entry,rootKey,key):
 	found = False
@@ -339,7 +336,6 @@ def searchEntry(entry,rootKey,key):
 				try: 
 					if (eD[u'@type'] == key):
 						value = eD['#text']
-						print value
 						found = True
 						break
 				except KeyError:
@@ -353,16 +349,40 @@ def searchEntry(entry,rootKey,key):
 					 
 	return value	 
 	
+
+# The following generates a list of abstracts that match a search query term from pubmed
+# It then finds GO terms that get generated from each of these abstracts by querying GOCat
+
+def searchtermNCBIGO(searchTerm,jsonFn):
 	
+	import pubmedQuery, json
+	abstracts = pubmedQuery.abstracts(searchTerm)
+	NCBIGO = {}
+	for abstract in abstracts:
+		print i
+		NCBIGO[i] = setSearchTerm(abstract)
+		i += 1
+		
+	with open(jsonFn,'w') as outfile:
+		json.dump(NCBIGO,outfile)	
+		
+	return NCBIGO	
+		
+		
+		
+	
+		
 	
 ###############################################################################################################
 # USED FOR TESTING METHODS. REMOVE IN FINAL VERSION!!!
 
 def main():
+
+    GOs = searchtermNCBIGO(sys.argv[1],sys.argv[2])   
+     
+#    setSearchTerm("ethylene root")
+#    print submitAllBySpecies("Arabidopsis thaliana")
     
-    setSearchTerm("ethylene root")
-    print "Hello"
-    submitAllBySpecies("Arabidopsis thaliana")
     
 if __name__ == "__main__":
     main()
