@@ -16,19 +16,26 @@
 import urllib2, json, csv, re, sys, xmltodict, tempfile, os
 from subprocess import call
 
-#Constants:
-#Array that contains all the Terms from GoCat. Items can be added and removed from it.
 arrayMainDictGoCat = []
-#List that contains all GOids of GoTerms
 listGOid = []
-#List that contains all Names of GoTerms
 listName = []
-#List that contains all Scores of GoTerms
 listScore = []
+
+def initialiseGlobalVariables():
+    #Constants:
+    #Array that contains all the Terms from GoCat. Items can be added and removed from it.
+    arrayMainDictGoCat = []
+    #List that contains all GOids of GoTerms
+    listGOid = []
+    #List that contains all Names of GoTerms
+    listName = []
+    #List that contains all Scores of GoTerms
+    listScore = []
 
 #Method 1: setSearchTerm(goTerm) 
 # Takes a search term as input and returns a list of dictionaries containing information about related GO terms
 def setSearchTerm(goTerm,searchType='ml'):
+    initialiseGlobalVariables()
     searchTypes = ['db','ml','mx']
     if searchType not in searchTypes:
        sys.exit("setSearchTerm:- searchTypes must be db, ml or mx")
@@ -350,39 +357,3 @@ def searchEntry(entry,rootKey,key):
 	return value	 
 	
 
-# The following generates a list of abstracts that match a search query term from pubmed
-# It then finds GO terms that get generated from each of these abstracts by querying GOCat
-
-def searchtermNCBIGO(searchTerm,jsonFn):
-	
-	import pubmedQuery, json
-	abstracts = pubmedQuery.abstracts(searchTerm)
-	NCBIGO = {}
-	for abstract in abstracts:
-		print i
-		NCBIGO[i] = setSearchTerm(abstract)
-		i += 1
-		
-	with open(jsonFn,'w') as outfile:
-		json.dump(NCBIGO,outfile)	
-		
-	return NCBIGO	
-		
-		
-		
-	
-		
-	
-###############################################################################################################
-# USED FOR TESTING METHODS. REMOVE IN FINAL VERSION!!!
-
-def main():
-
-    GOs = searchtermNCBIGO(sys.argv[1],sys.argv[2])   
-     
-#    setSearchTerm("ethylene root")
-#    print submitAllBySpecies("Arabidopsis thaliana")
-    
-    
-if __name__ == "__main__":
-    main()
